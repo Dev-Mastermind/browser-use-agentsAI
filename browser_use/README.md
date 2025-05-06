@@ -49,3 +49,12 @@ Single file; if too long → split into multiple files (one prompt per file or s
 ### Routers.py
 
 Never split into more than one file
+
+
+### Future Work
+Added the mainly browser_use/browser/browser_backends.py, browser_use/browser/browser_interface.py to replace Playwright.
+The pinpoint location where the playwright browser is replaced with our extension is at line 168 of browser.py
+
+Further, work is required in server.py file of Extension to navigate browser with actions that will be sent from browser-use.
+A brief demo/test code is also added in browser.py to simulate how to send events to extension(Make sure server of our extension is also running to receive the events). 
+Server.py file of extension, should send BrowserState to the browser-use when/where needed.
