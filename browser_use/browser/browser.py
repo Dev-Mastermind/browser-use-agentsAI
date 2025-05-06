@@ -110,6 +110,9 @@ class BrowserConfig(BaseModel):
 	proxy: ProxySettings | None = None
 	new_context_config: BrowserContextConfig = Field(default_factory=BrowserContextConfig)
 
+import os
+import asyncio
+from .browser_backends import get_browser
 
 # @singleton: TODO - think about id singleton makes sense here
 # @dev By default this is a singleton, but you can create multiple instances if you need to.
@@ -121,14 +124,29 @@ class Browser:
 	It is recommended to use only one instance of Browser per your application (RAM usage will grow otherwise).
 	"""
 
+	async def start(self):
+		await self.playwright.start()
+
+	async def stop(self):
+		await self.playwright.stop()
+
+	async def navigate(self, url: str):
+		await self.playwright.navigate(url)
+
+	async def click(self, selector: str):
+		await self.playwright.click(selector)
+
+	async def evaluate(self, script: str, *args, **kwargs):
+		await self.playwright.evaluate(script, *args, **kwargs)
+
 	def __init__(
 		self,
 		config: BrowserConfig | None = None,
 	):
 		logger.debug('🌎  Initializing new browser')
 		self.config = config or BrowserConfig()
-		self.playwright: Playwright | None = None
-		self.playwright_browser: PlaywrightBrowser | None = None
+		self.playwright = get_browser('chrome_extension')
+		self.playwright_browser = None
 
 	async def new_context(self, config: BrowserContextConfig | None = None) -> BrowserContext:
 		"""Create a browser context"""
@@ -147,7 +165,7 @@ class Browser:
 	@time_execution_async('--init (browser)')
 	async def _init(self):
 		"""Initialize the browser session"""
-		playwright = await async_playwright().start()
+		playwright = get_browser('chrome_extension')
 		self.playwright = playwright
 
 		browser = await self._setup_browser(playwright)
@@ -301,7 +319,7 @@ class Browser:
 		)
 		return browser
 
-	async def _setup_browser(self, playwright: Playwright) -> PlaywrightBrowser:
+	async def _setup_browser(self, playwright):
 		"""Sets up and returns a Playwright Browser instance with anti-detection measures."""
 		try:
 			if self.config.cdp_url:
@@ -384,3 +402,16 @@ class Browser:
 					await client.aclose()
 				except Exception as e:
 					logger.debug(f'Error closing httpx client: {e}')
+
+# Example demo of how to use the Browser class:
+if __name__ == "__main__":
+	async def demo():
+		mgr = Browser()
+		await mgr.start()
+		await mgr.navigate("https://wikipedia.com")
+		await mgr.click("h1")
+		result = await mgr.evaluate('document.title')
+		print("Page title:", result)
+		await mgr.stop()
+
+	asyncio.run(demo())

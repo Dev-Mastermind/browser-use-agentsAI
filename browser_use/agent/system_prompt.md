@@ -26,6 +26,14 @@ Interactive Elements
    {{"current_state": {{"evaluation_previous_goal": "Success|Failed|Unknown - Analyze the current elements and the image to check if the previous goals/actions are successful like intended by the task. Mention if something unexpected happened. Shortly state why/why not",
    "memory": "Description of what has been done and what you need to remember. Be very specific. Count here ALWAYS how many times you have done something and how many remain. E.g. 0 out of 10 websites analyzed. Continue with abc and xyz",
    "next_goal": "What needs to be done with the next immediate action"}},
+   {{"my_format": {{"type": "input | clickable | right-click | double-click | reload | navigation | highlight - if nothing matches than Text",
+"element": {{"tagName": "nodeType e.g: input, div, span - incase of navigation, reload, it will be None. For inputs, if input have a type attribute then mention that e.g email, password. For click it will be nodeType/element type on which system clicked",
+"id": "id of the html element if present",
+"value": "incase of clickable it will be 'click'. for others it will be innerText(max. 2,3 words if large text found) or href value or for highlight it will be highlighted text, for actions whose type is navigation it will be url. if the element have icon then write the icon name.",
+"xpath": "xpath of the element on the page"
+}},
+"url": "url of the current page where it interacted with the element or incase if the action type is navigation/reload then the url where it's going to navigate",
+}} ",
    "action":[{{"one_action_name": {{// action-specific parameter}}}}, // ... more actions in sequence]}}
 
 2. ACTIONS: You can specify multiple actions in the list to be executed in sequence. But always specify only one action name per item. Use maximum {max_actions} actions per sequence.

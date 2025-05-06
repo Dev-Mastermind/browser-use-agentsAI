@@ -114,6 +114,7 @@ def sample_history(action_registry):
 					evaluation_previous_goal='Extracted content',
 					memory='Content extracted',
 					next_goal='Finish task',
+					my_output='Action detail in specified format',
 				),
 				action=[done_action],
 			),

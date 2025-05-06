@@ -75,9 +75,11 @@ def log_response(response: AgentOutput) -> None:
 	else:
 		emoji = '🤷'
 
+	logger.info(f'🔑 Recording Action: {response.current_state.my_format}')
 	logger.info(f'{emoji} Eval: {response.current_state.evaluation_previous_goal}')
-	logger.info(f'🧠 Memory: {response.current_state.memory}')
-	logger.info(f'🎯 Next goal: {response.current_state.next_goal}')
+	# logger.info(f'🔍 Action summary: {response.current_state.my_format}')
+	# logger.info(f'🧠 Memory: {response.current_state.memory}')
+	# logger.info(f'🎯 Next goal: {response.current_state.next_goal}')
 	for i, action in enumerate(response.action):
 		logger.info(f'🛠️  Action {i + 1}/{len(response.action)}: {action.model_dump_json(exclude_unset=True)}')
 
@@ -452,10 +454,10 @@ class Agent(Generic[Context]):
 			self._message_manager.add_state_message(state, self.state.last_result, step_info, self.settings.use_vision)
 
 			# Run planner at specified intervals if planner is configured
-			if self.settings.planner_llm and self.state.n_steps % self.settings.planner_interval == 0:
-				plan = await self._run_planner()
-				# add plan before last state message
-				self._message_manager.add_plan(plan, position=-1)
+			# if self.settings.planner_llm and self.state.n_steps % self.settings.planner_interval == 0:
+			plan = await self._run_planner()
+			# add plan before last state message
+			self._message_manager.add_plan(plan, position=-1)
 
 			if step_info and step_info.is_last_step():
 				# Add last step warning if needed

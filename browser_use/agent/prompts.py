@@ -170,7 +170,15 @@ Your output format should be always a JSON object with the following fields:
     "progress_evaluation": "Evaluation of progress towards the ultimate goal (as percentage and description)",
     "challenges": "List any potential challenges or roadblocks",
     "next_steps": "List 2-3 concrete next steps to take",
-    "reasoning": "Explain your reasoning for the suggested next steps"
+    "reasoning": "Explain your reasoning for the suggested next steps",
+	"my_format": '''A specific format with which you will interact. Format is like: {"type": "input | clickable | right-click | double-click | reload | navigation | highlight - if nothing matches than Text",
+"element": {{"tagName": "nodeType e.g: input, div, span" - incase of navigation, reload cases it will be None. For inputs, if input have a type attribute then mention that e.g email, password",
+"id": "id of the element",
+"value": "value of the element/action e.g: incase of input it will be value property, incase of clickable it will be 'click'. for others it will be innerText(max. 2,3 words if large text found) or href value or for highlight it will be highlighted text, for actions whose type is navigation it will be url. if the element have icon then write the icon name",
+"xpath": "xPath to the element",
+}},
+"url": "url of the current page where it interacted with the element or incase if the action type is navigation/reload then the url where it's going to navigate",
+} ''',
 }}
 
 Ignore the other AI messages output structures.

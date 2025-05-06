@@ -97,6 +97,14 @@ class MessageManager:
 						""".strip(),
 						},
 						'action': [{'click_element_by_index': {'index': 127}}],
+						'my_format': {"type": "input | click | right-click | double-click | reload | navigation | highlight - if nothing matches than Text",
+							"element": {"tagName": "what's the exact tagName of the element, incase of navigation and reload, it will be None. For inputs, if input have a type attribute then mention that type value e.g email, password. For click, it will be the tagName of the element",
+							"id": "id of the element if present",
+							"value": "incase of clickable it will be 'click'. for others it will be innerText(max. 2,3 words if large text found) or href value or for highlight it will be highlighted text, for actions whose type is navigation it will be url. if the element have icon then write the icon name",
+							"xpath": "xpath of the element on the page"
+							},
+							"url": "url of the current page where it interacted with the element or incase if the action type is navigation/reload then the url where it's going to navigate",
+						}
 					},
 					'id': str(self.state.tool_id),
 					'type': 'tool_call',

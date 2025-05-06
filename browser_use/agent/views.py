@@ -71,6 +71,26 @@ class AgentSettings(BaseModel):
 	is_planner_reasoning: bool = False  # type: ignore
 	extend_planner_system_message: Optional[str] = None
 
+class ElementDetails(BaseModel):
+    tagName: str
+    id: Optional[str] = None
+    value: Optional[str] = None
+    xpath: str
+
+class ElementInteraction(BaseModel):
+    type: Literal['input', 'clickable', 'right-click', 'double-click', 'reload', 'navigation', 'highlight', 'input', 'Text']
+    element: ElementDetails
+    url: str
+
+class ActionResult(BaseModel):
+	"""Result of executing an action"""
+
+	is_done: Optional[bool] = False
+	success: Optional[bool] = None
+	extracted_content: Optional[str] = None
+	error: Optional[str] = None
+	include_in_memory: bool = False  # whether to include in past messages as context or not
+	my_format: ElementInteraction | None = None
 
 class AgentState(BaseModel):
 	"""Holds all state information for an Agent"""
@@ -100,14 +120,6 @@ class AgentStepInfo:
 		return self.step_number >= self.max_steps - 1
 
 
-class ActionResult(BaseModel):
-	"""Result of executing an action"""
-
-	is_done: Optional[bool] = False
-	success: Optional[bool] = None
-	extracted_content: Optional[str] = None
-	error: Optional[str] = None
-	include_in_memory: bool = False  # whether to include in past messages as context or not
 
 
 class StepMetadata(BaseModel):
@@ -130,6 +142,7 @@ class AgentBrain(BaseModel):
 	evaluation_previous_goal: str
 	memory: str
 	next_goal: str
+	my_format: ElementInteraction
 
 
 class AgentOutput(BaseModel):
